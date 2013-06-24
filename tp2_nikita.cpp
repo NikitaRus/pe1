@@ -123,12 +123,25 @@ void menu_manager(char *tmp_login, short int menu_valid_state) {
 10) Salir\n");
 	printf("Opcion: "); scanf("%d", &menu_item);
 
-	menu_validation(menu_item, menu_valid_state, tmp_login); //Validar item seleccionado ->menu_validation
+	//Validar item seleccionado ->menu_validation
+	if(menu_validation(menu_item, menu_valid_state, tmp_login) == 0 && menu_item == 1)
+	{
+    	do {
+    		system("clear");	       
+	       	printf("Introduce los datos de empleado:")
+	       	printf("\nLegajo: "); scanf("%d", &tmp_legajo); 
+	       	printf("\nCategoria: "); scanf("%d", &tmp_categoria);
+	       	printf("\nHoras Extra: "); scanf("%d", &tmp_horas);
+	       	printf("\nNumero de mes: "); scanf("%d", &tmp_mes);
+	   	} while(legajo != 100);	
+	}
+
+
 }
 
 // = | = | = MENU VALIDATION
 // ==================================================================
-void menu_validation(short int menu_item, short int menu_valid_state, char *tmp_login) {
+int menu_validation(short int menu_item, short int menu_valid_state, char *tmp_login) {
 	//Usamos esto para reutilizar o modificar los permisos de los menus
 	if (menu_valid_state == 0) {
 		if(menu_item > 0 && menu_item < 10) {
@@ -137,10 +150,10 @@ void menu_validation(short int menu_item, short int menu_valid_state, char *tmp_
 			menu_manager(tmp_login, menu_valid_state);
 		}
 		else if(menu_item == 10) {
-			menu_options(menu_item);
+			
 		}
 		else if(menu_item == 0) {
-			menu_options(menu_item);
+			
 		}
 	} //Si no metimos datos al sistema solo podemos meter datos y salir
 
@@ -166,4 +179,5 @@ void menu_validation(short int menu_item, short int menu_valid_state, char *tmp_
 void menu_options(short int menu_item) {
 	system("clear"); //system("cls")
 	printf("Soy la opcion #%d\n", menu_item);
+	    
 }
