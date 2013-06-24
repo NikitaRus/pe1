@@ -36,12 +36,6 @@ ninguna otra opcion, y vice versa.)
 == Es llamado por menu_manager
 */
 
-void menu_options(short int);
-/* TO-DO
-== Implementacion de las opciones del menu. 
-== Es llamado por menu_validation.
-*/
-
 
 // = MAIN
 // ==================================================================
@@ -115,17 +109,11 @@ void menu_manager(char *tmp_login, short int menu_valid_state) {
 2) punto2\n\
 3) punto3\n\
 4) punto4\n\
-5) punto5\n\
-6) punto6\n\
-7) punto7\n\
-8) punto8\n\
-9) punto9\n\
-10) Salir\n");
+5) Salir\n");
 	printf("Opcion: "); scanf("%d", &menu_item);
 
 	//Validar item seleccionado ->menu_validation
-	if(menu_validation(menu_item, menu_valid_state, tmp_login) == 0 && menu_item == 1)
-	{
+	if(menu_validation(menu_item, menu_valid_state, tmp_login) == 0 && menu_item == 0) {
     	do {
     		system("clear");	       
 	       	printf("Introduce los datos de empleado:")
@@ -134,26 +122,33 @@ void menu_manager(char *tmp_login, short int menu_valid_state) {
 	       	printf("\nHoras Extra: "); scanf("%d", &tmp_horas);
 	       	printf("\nNumero de mes: "); scanf("%d", &tmp_mes);
 	   	} while(legajo != 100);	
-	}
-
-
+	} else if(menu_validation(menu_item, menu_valid_state, tmp_login) == 1) {
+		switch(menu_item) {
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+		}
+	} else if(menu_validation(menu_item, menu_valid_state, tmp_login) == 1 && menu_item == 5)
 }
 
 // = | = | = MENU VALIDATION
 // ==================================================================
+// return 0 = introducir los datos
+// return 1 = datos introducidos y solo se puede usar el rango 0< && <=5
 int menu_validation(short int menu_item, short int menu_valid_state, char *tmp_login) {
 	//Usamos esto para reutilizar o modificar los permisos de los menus
 	if (menu_valid_state == 0) {
-		if(menu_item > 0 && menu_item < 10) {
+		if(menu_item > 0 && menu_item < 5) {
 			system("clear"); //system("cls")
 			printf("Debes introducir datos antes de utilizar el menu\n\n");
 			menu_manager(tmp_login, menu_valid_state);
 		}
-		else if(menu_item == 10) {
-			
+		else if(menu_item == 5) {
+			return 1;
 		}
 		else if(menu_item == 0) {
-			
+			return 0;
 		}
 	} //Si no metimos datos al sistema solo podemos meter datos y salir
 
@@ -161,23 +156,14 @@ int menu_validation(short int menu_item, short int menu_valid_state, char *tmp_l
 		if(menu_item == 0) {
 			system("clear"); //system("cls")
 			printf("Se puede introducir datos solo una vez.\n");
-			menu_manager(tmp_login, menu_valid_state);
+			return 1;
 		}
-		else if(menu_item > 0 && menu_item <= 10) {
-			menu_options(menu_item);
+		else if(menu_item > 0 && menu_item <= 4) {
+			return 1;
 		}
 	} //Si metimos datos al sistema accedenis al menu
 
 	else {
-		printf("Fallo super grave en la matrix...\n");
+		printf("Fuera de indice de validacion. Error en el sistema.\n");
 	} //Si se va todo al carajo
-}
-
-
-// = | = | = | = MENU OPTIONS
-// ==================================================================
-void menu_options(short int menu_item) {
-	system("clear"); //system("cls")
-	printf("Soy la opcion #%d\n", menu_item);
-	    
 }
