@@ -115,14 +115,24 @@ void menu_data(bool *data) // llenamos los datos
    
    while(tmp_legajo != 100) 
      {
+	bool validated = true;
 	system("clear"); //system("cls");
 	printf("Introduce los datos de empleado:");
-	printf("\nLegajo: ");		scanf("%d", &tmp_legajo); if(tmp_legajo == 100) { break; }
-	printf("\nCategoria: ");	scanf("%d", &tmp_categoria);
-	printf("\nHoras Extra: ");	scanf("%d", &tmp_horas);
-	printf("\nNumero de mes: ");	scanf("%d", &tmp_mes);
+	printf("\nLegajo: ");		        scanf("%d", &tmp_legajo); if(tmp_legajo == 100) { break; } else if(tmp_legajo < 0) { validated = false; }
+ 	printf("\nCategoria: ");	        scanf("%d", &tmp_categoria); if(tmp_categoria < 0 || tmp_categoria > 6) { validated = false; }
+	printf("\nHoras Extra: ");      	scanf("%d", &tmp_horas) if(tmp_horas < 0) { validated = false; };
+	printf("\nNumero de mes [1 - 12]: ");	scanf("%d", &tmp_mes); if(tmp_mes <= 0 || tmp_mes > 12) { validated = false; }
      }
-   *data = true; // modificamos 'data' a travez de su puntero para poder habilitar el menu al terminar de introducir los datos
+   
+   if(validated == true)
+     {
+	*data = true; // modificamos 'data' a travez de su puntero para poder habilitar el menu al terminar de introducir los datos
+     }
+   else
+     {
+	printf("Los datos no han sido validados por no respetar el formato");
+     }
+   
    system("clear"); //system("cls");
 }
 
