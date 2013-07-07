@@ -6,15 +6,15 @@
 
 bool login_request();
 bool login_manager(char *, char *);
-void menu_data(bool *, int , int *, int *);
+void menu_data(bool *, int *, int *, int *);
 short int menu_items();
 void data_processing();
 
 int main() 
 {
-   int SueldoAnualProfesional[81]; for(int id = 0; id <= 81; id++) { SueldoAnualProfesional[id] = 0; }
-   int SueldoMes[12]; for(int id = 0; id <= 12; id++) { SueldoMes[id] = 0; }
-   int SueldoLegajo[81]; for(int id = 0; id <= 81; id++) { SueldoLegajo[id] = 0; }
+   int SueldoAnualProfesional[81] = {0}; 
+   int SueldoMes[12] = {0};
+   int SueldoLegajo[81] = {0};
    
    bool data = false;
    int menu_item;
@@ -116,21 +116,21 @@ bool login_manager(char *tmp_login, char *tmp_paswd) {
    }
 }
 
-void menu_data(bool *data, int SueldoAnualProfesional[81], int *SueldoMes, int *SueldoLegajo) // llenamos los datos
+void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *SueldoLegajo) // llenamos los datos
 {
    int tmp_legajo;
    int tmp_categoria;
    int tmp_horas;
    int tmp_mes;
    
-   int SueldoAnualProfesional[3] = 100;
+   SueldoAnualProfesional[3] = 100;
    printf("%d\n", SueldoAnualProfesional[3]);
 
    int tmp_numero = 0;
    
    bool validated = true;
    
-   while(tmp_legajo != 100) 
+   while(tmp_numero != 80) 
     {
     	//system("clear"); //system("cls");
     	printf("\nIntroduce los datos #%d:", tmp_numero);
