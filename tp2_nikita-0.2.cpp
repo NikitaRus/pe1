@@ -153,7 +153,7 @@ void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *Sue
    int tmp_horas;
    int tmp_mes;
 
-   int tmp_numero = 0;
+   int tmp_numero = 1;
    
    bool validated = true;
    
@@ -161,19 +161,20 @@ void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *Sue
     {
     	//system("clear"); //system("cls");
     	printf("\nIntroduce los datos #%d:", tmp_numero);
-    	printf("\nNumero de legajo: ");		        scanf("%d", &tmp_legajo); 
-        if(tmp_legajo == SALIDA) { break; } else if(tmp_legajo < 1) { 
+    	printf("\nNumero de legajo: ");		           scanf("%d", &tmp_legajo); 
+        if(tmp_legajo == SALIDA) { break; } 
+        else if(tmp_legajo < 1) { 
             validated = false; }
 
-     	printf("\nCategoria perteneciente: ");	        scanf("%d", &tmp_categoria); 
+     	printf("\nCategoria perteneciente: ");         scanf("%d", &tmp_categoria); 
         if(tmp_categoria < 1 || tmp_categoria > 6) { 
             validated = false; }
 
-    	printf("\nHoras Extra trabajadas: ");      	scanf("%d", &tmp_horas); 
+    	printf("\nHoras Extra trabajadas: ");          scanf("%d", &tmp_horas); 
         if(tmp_horas < 0) { 
             validated = false; }
 
-    	printf("\nNumero del mes [1 - 12]: ");	scanf("%d", &tmp_mes); 
+    	printf("\nNumero del mes [1 - 12]: ");	       scanf("%d", &tmp_mes); 
         if(tmp_mes <= 0 || tmp_mes > 12) { 
             validated = false; }
 
@@ -241,7 +242,10 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                     printf("Sueldo: %d$ | Legajo: #%d\n", Argument1[i], i);
                 }
                 
-            } break;
+            } 
+
+            break;
+
         case 2:
             printf("Total pagado por mes:\n");
             for (int i = 0; i <= MES; i++) {
@@ -250,7 +254,10 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                     printf("Total: %d$ | Mes: #%d\n", Argument1[i], i);
                 }
                 
-            } break;
+            } 
+
+            break;
+
         case 3:
             int tmp_avglegajo;
 
@@ -261,43 +268,43 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                 }
                 
             }
+
             break;
 
         case 4:
             //falta mucha optimizacion en esta seccion
-            int LegajoOrdenadoSueldo[LEGAJO] = { *Argument1 }; //Creamos un vector igual al original para ordenarlo y sacar los index
-            int LegajoIndexOrdenado[LEGAJO] = { 0 }; //numeros de legajo en el orden correcto para llamar todos los datos por ese orden.
-            int tmp_mem;
+            int *LegajoOrdenadoSueldo = Argument1; //Creamos un vector igual al original para ordenarlo y sacar los index
+            int LegajoIndexOrdenado[LEGAJO]; 
+            for(int i = 0; i < LEGAJO; i++) { LegajoIndexOrdenado[i] = i; } //numeros de legajo en el orden correcto para llamar todos los datos por ese orden.
+            int tmp_mem, c, d;
 
-            for(int times = 0; times <= LEGAJO - 1; times++) {
-                for (int item = 0; item <= LEGAJO - times - 1; item++) { 
-                    if (LegajoOrdenadoSueldo[item] > LegajoOrdenadoSueldo[item + 1]) 
+
+            for(c = 0; c < (LEGAJO - 1); c++) {
+                for (d = 1; d < LEGAJO - c; d++) { 
+                    if (LegajoOrdenadoSueldo[d] > LegajoOrdenadoSueldo[d - 1]) 
                     {
-                        tmp_mem = LegajoOrdenadoSueldo[item];
-                        LegajoOrdenadoSueldo[item] = LegajoOrdenadoSueldo[item + 1];
-                        LegajoOrdenadoSueldo[item + 1] = tmp_mem;
+                        tmp_mem = LegajoOrdenadoSueldo[d];
+                        LegajoOrdenadoSueldo[d] = LegajoOrdenadoSueldo[d - 1];
+                        LegajoOrdenadoSueldo[d - 1] = tmp_mem;
 
-                        tmp_mem = item;
-                        LegajoIndexOrdenado[item] = item + 1;
-                        LegajoIndexOrdenado[item + 1] = tmp_mem;
+                        tmp_mem = LegajoIndexOrdenado[d];
+                        LegajoIndexOrdenado[d] = LegajoIndexOrdenado[d - 1];
+                        LegajoIndexOrdenado[d - 1] = tmp_mem;
                     }
                 }
             }
 
             for(int items = 0; items <= LEGAJO; items++)
             {
-                int item = LegajoIndexOrdenado[item];
+                int legajo = LegajoIndexOrdenado[items];
 
-                printf("Sueldo: %d\n", Argument1[item]);
-                printf("  Legajo: %d\n", item);
-                printf("  Horas extra: %d\n\n", Argument2[item]);
-            }
-
-            getchar();
-
-
-
-            
+                if(LegajoOrdenadoSueldo[items] > 0)
+                {
+                    printf("Sueldo: %d\n", LegajoOrdenadoSueldo[items]);
+                    printf("  Legajo: %d\n", legajo);
+                    printf("  Horas extra: %d\n\n", Argument2[legajo]);
+                }
+            }     
 
             break;
 
