@@ -53,7 +53,7 @@ int main()
 	     
 	     if(data == false && menu_item == 0) // opcion 0 usable solo si no introducimos nada
 	       {
-		  system("clear"); //system("cls");
+		  //system("clear"); //system("cls");
 		  menu_data(&data, SueldoAnualProfesional, SueldoMes, SueldoLegajo, SalarioCategoria, CostoHoraExtraCategoria, TotalHorasExtra); // introducimos datos
 	       }
 	     else if(data == true) // si ya introducimos datos habilitamos las otras opciones
@@ -62,24 +62,34 @@ int main()
 		    {
 		     case 0:
 		       system("clear"); //system("cls");
-		       printf("Solo se puede introducir los datos una vez\n");
+		       getchar();
+               printf("Solo se puede introducir los datos una vez\n");
                getchar();
 		       break;
 		       
 		     case 1:
-		      system("clear");
+		      system("clear"); //system("cls");
+               getchar();
 			   data_processing(menu_item, SueldoAnualProfesional, 0);
 		       break;
+
 		     case 2:
-		       system("clear");
+		       system("clear"); //system("cls");
+               getchar();
                data_processing(menu_item, SueldoMes, 0);
                 
 		       break;
+
 		     case 3:
-		       system("clear");
+		       system("clear"); //system("cls");
+               getchar();
+               data_processing(menu_item, SueldoAnualProfesional, 0);
                
 		       break;
+
 		     case 4:
+               system("clear"); //system("cls");
+               getchar();
 		       data_processing(menu_item, SueldoAnualProfesional, TotalHorasExtra);
                
 		       break;
@@ -92,7 +102,9 @@ int main()
 	     else // si tratamos de usar el menu sin introducir datos nos tira error
 	       {
 		  system("clear"); //system("cls");
+          getchar();
 		  printf("Debes introducir los datos antes de usar el menu\n");
+          getchar();
 	       }
 	  }
      }
@@ -159,7 +171,7 @@ void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *Sue
    
    while(tmp_numero <= EMPLEADOS) 
     {
-    	//system("clear"); //system("cls");
+    	system("clear"); //system("cls");
     	printf("\nIntroduce los datos #%d:", tmp_numero);
     	printf("\nNumero de legajo: ");		           scanf("%d", &tmp_legajo); 
         if(tmp_legajo == SALIDA) { break; } 
@@ -181,7 +193,7 @@ void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *Sue
 
         if(validated == true) 
         {
-            int pago = SalarioCategoria[tmp_categoria] + (tmp_horas * CostoHoraExtraCategoria[tmp_categoria]);
+            int pago = (SalarioCategoria[tmp_categoria] + (tmp_horas * CostoHoraExtraCategoria[tmp_categoria]));
 
             *data = true; // modificamos 'data' a travez de su puntero para poder habilitar el menu al terminar de introducir los datos
 
@@ -204,9 +216,10 @@ void menu_data(bool *data, int *SueldoAnualProfesional, int *SueldoMes, int *Sue
         else 
         {   
             system("clear"); //system("cls");
+            getchar();
             printf("Los datos de la introduccion #%d no han sido validados por favor vuelva a introducirlos.", tmp_numero);
             validated = true;
-            getchar();
+            
         }
     }
    
@@ -217,6 +230,8 @@ short int menu_items() // menu separado para poder imprimirlo cuando lo necesite
 {
    int menu_item;
    
+   system("clear"); //system("cls");
+
    printf("Bienvenido al menu principal del programa.\n");
    printf("0) Introducir datos\n");
    printf("1) Sueldo anual\n");
@@ -230,25 +245,27 @@ short int menu_items() // menu separado para poder imprimirlo cuando lo necesite
    return menu_item;
 } 
 
-void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
+void data_processing(int menu_item, int *Argument1, int *Argument2)
 {
     switch(menu_item) 
     {
         case 1:
             printf("Sueldo anual de cada profesional:\n");
-            for (int i = 0; i <= LEGAJO; i++) {
+
+            for (int i = 1; i <= LEGAJO; i++) {
                 if (Argument1[i] != 0)
                 {
                     printf("Sueldo: %d$ | Legajo: #%d\n", Argument1[i], i);
                 }
                 
             } 
+            getchar();
 
             break;
 
         case 2:
             printf("Total pagado por mes:\n");
-            for (int i = 0; i <= MES; i++) {
+            for (int i = 1; i <= MES; i++) {
                 if (Argument1[i] != 0)
                 {
                     printf("Total: %d$ | Mes: #%d\n", Argument1[i], i);
@@ -256,30 +273,47 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                 
             } 
 
+            getchar();
             break;
 
         case 3:
             int tmp_avglegajo;
+            int tmp_numbers;
+            int average;
 
-            for (int i = 0; i <= LEGAJO; i++) {
+            tmp_numbers = 0;
+            for(int i = 0; i <= LEGAJO; i++) {
                 if (Argument1[i] != 0)
                 {
-                    
-                }
-                
+                    tmp_numbers += 1;
+                    tmp_avglegajo += Argument1[i];
+                }                
             }
+
+            average = tmp_avglegajo / tmp_numbers;
+            
+            tmp_numbers = 0;
+            for(int i = 0; i <= LEGAJO; i++) {
+                if(Argument1[i] > average) {
+                    tmp_numbers += 1;
+                }
+            }
+
+            printf("Cantidad de sueldos que superan el promedio: %d\n", tmp_numbers);
+            getchar();
 
             break;
 
         case 4:
             //falta mucha optimizacion en esta seccion
+            
             int *LegajoOrdenadoSueldo = Argument1; //Creamos un vector igual al original para ordenarlo y sacar los index
-            int LegajoIndexOrdenado[LEGAJO]; 
+            int LegajoIndexOrdenado[LEGAJO]; //Aca vienen las posiciones originales del vector sueldos ordenados (copia de la posicion de los sueldos desordenados)
             for(int i = 0; i < LEGAJO; i++) { LegajoIndexOrdenado[i] = i; } //numeros de legajo en el orden correcto para llamar todos los datos por ese orden.
             int tmp_mem, c, d;
 
 
-            for(c = 0; c < (LEGAJO - 1); c++) {
+            /*for(c = 0; c < (LEGAJO - 1); c++) {
                 for (d = 1; d < LEGAJO - c; d++) { 
                     if (LegajoOrdenadoSueldo[d] > LegajoOrdenadoSueldo[d - 1]) 
                     {
@@ -292,9 +326,9 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                         LegajoIndexOrdenado[d - 1] = tmp_mem;
                     }
                 }
-            }
+            }*/
 
-            for(int items = 0; items <= LEGAJO; items++)
+            for(int items = 1; items <= LEGAJO; items++)
             {
                 int legajo = LegajoIndexOrdenado[items];
 
@@ -306,6 +340,7 @@ void data_processing(int menu_item, int *Argument1 = 0, int *Argument2 = 0)
                 }
             }     
 
+            getchar();
             break;
 
     }
