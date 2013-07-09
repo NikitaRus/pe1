@@ -132,7 +132,6 @@ bool login_request()
 		}
 		else
 		{
-			
 		     	printf("Datos equivocados. Intento %d/%d\n", r, r_times);
 		}
      	}
@@ -217,11 +216,11 @@ void menu_data(bool *validated, float *SueldoAnualProfesional, float *SueldoMes,
 		 }
 	        	else
 		{
-			system("clear"); //system("cls");
 			getchar();
-
-			printf("Los datos de la introduccion #%d no han sido validados por favor vuelva a introducirlos.", tmp_numero_categoria);
+			printf("Los datos de la introduccion #%d no han sido validados por favor vuelva a introducirlos.\n", tmp_numero_categoria);
 			categorias = true;
+			getchar();
+			system("clear"); //system("cls");
 		     
 		}
 
@@ -280,11 +279,11 @@ void menu_data(bool *validated, float *SueldoAnualProfesional, float *SueldoMes,
 		}
 	        	else
 		{
-			
-			system("clear"); //system("cls");
 			getchar();
 			printf("Los datos #%d no han sido validados o completos por favor vuelva a introducirlos.\n", tmp_numero_empleado);
 			empleados = true;
+			getchar();
+			system("clear"); //system("cls");
 		}
 		if (SueldoAnualProfesional[tmp_legajo] > 0) { *validated = true; printf("Validado!\n"); } 
 		if(tmp_numero_empleado > EMPLEADOS) { categorias = false; empleados = false; *validated = true; break; }
