@@ -4,6 +4,10 @@
 #include <unistd.h> /*no se si esta en windows, buscar y borrar "sleep(2)"*/
 //#include <windows.h>
 
+/*
+   EN WINDOWS HAY QUE BUSCAR system("clear"); Y REMPLAZARLO POR system("cls");
+*/
+
 #define LOGIN "Nikita"
 #define PASSWORD "1234"
 
@@ -18,7 +22,7 @@
 //
 bool login_request();
 bool login_validator(char *, char *);
-void menu_data(bool *, bool *, float *, float *, int *);
+void menu_data(bool *, float *, float *, int *);
 short int menu_items();
 void data_processing(int, float *, int *);
 //
@@ -29,8 +33,7 @@ int main()
 	float SueldoMes[MES + 1] = {0};
 	int TotalHorasExtra[LEGAJO] = {0};
    
-     	bool categorias = true;
-	bool empleados = false;
+	bool validated = false;
    	int menu_item;
    
 	system("clear"); //system("cls")
@@ -40,12 +43,12 @@ int main()
 		{
 			menu_item = menu_items(); // llamamos al menu para introducir items
 		     
-		 	if(empleados == false && menu_item == 0) // opcion 0 usable solo si no introducimos nada
+		 	if(validated == false && menu_item == 0) // opcion 0 usable solo si no introducimos nada
 		       	{
 				//system("clear"); //system("cls");
-			  	menu_data(&empleados, &categorias, SueldoAnualProfesional, SueldoMes, TotalHorasExtra); // introducimos datos
+			  	menu_data(&validated, SueldoAnualProfesional, SueldoMes, TotalHorasExtra); // introducimos datos
 		       	}
-		     	else if(empleados) // si ya introducimos datos habilitamos las otras opciones
+		     	else if(validated == true) // si ya introducimos datos habilitamos las otras opciones
 		       	{
 				switch(menu_item) // opciones despues de introducir datos
 			    	{
@@ -99,61 +102,63 @@ int main()
 
 bool login_request()
 {
-   short int r_times = 3; //Cuantas veces repetir el inicio de sesion
-   
-   printf("Ingrese sus datos de usuario: \n");
-   for(int r = 1; r <= r_times; r++)
-     {
-	//Almacenamiento temporal
-	char tmp_login[16];
-	char tmp_paswd[32];
-	
-	//Pedimos los datos
-	printf("Username: "); fflush(stdin); gets(tmp_login); // Compilador de Linux tirando warnings de que 'gets' no apto para el uso
-	printf("Password: "); fflush(stdin); gets(tmp_paswd);
-	
-	if(login_validator(tmp_login, tmp_paswd))
-	  {
-	     printf("Logeado\n"); system("clear"); //system("cls")
-	     return true;
-	     break;
-	     
-	  }
-	else if(r == r_times)
-	  {
-	     printf("Autentificacion fallida.\n");
-	     return false;
-	     break;
-	     
-	  }
-	else
-	  {
-	     printf("Datos equivocados. Intento %d/%d\n", r, r_times);
-	  }
-     }
+ 	short int r_times = 3; //Cuantas veces repetir el inicio de sesion
+ 
+ 	system("clear"); //system("cls");
+	printf("Ingrese sus datos de usuario: \n");
+	for(int r = 1; r <= r_times; r++)
+	{
+		//Almacenamiento temporal
+		char tmp_login[16];
+		char tmp_paswd[32];
+		
+		//Pedimos los datos
+		printf("Username: "); fflush(stdin); gets(tmp_login); // Compilador de Linux tirando warnings de que 'gets' no apto para el uso
+		printf("Password: "); fflush(stdin); gets(tmp_paswd);
+		
+		if(login_validator(tmp_login, tmp_paswd))
+		{
+			printf("Logeado\n"); system("clear"); //system("cls")
+
+		     	return true;
+		     	break;
+		}
+		else if(r == r_times)
+		{
+		     	printf("Autentificacion fallida.\n");
+
+		     	return false;
+		     	break;
+		}
+		else
+		{
+			
+		     	printf("Datos equivocados. Intento %d/%d\n", r, r_times);
+		}
+     	}
 }
 
 bool login_validator(char *tmp_login, char *tmp_paswd)
 {
-   //Separado del resto de login_request para poder implementar en el futuro la lectura de datos
-   //de una fuente externa o desencriptacion de contrasena como funciones separadas.
-   
-   //Lo correcto seria mudar los usuarios a .ini/.dat/DB y leerlos de ahi encriptados
-   char login[16] = LOGIN;
-   char paswd[32] = PASSWORD;
-   
-   //!strcmp parte de string.h para comparar arrays de chars de manera que devuelven true o false y se autoverifican
-   if(!strcmp(login, tmp_login) && !strcmp(paswd, tmp_paswd))
-     {
-	return true; //Logeado
-     }
-   else
-     {
-	return false; //Fallo
-     }
+   	//Separado del resto de login_request para poder implementar en el futuro la lectura de datos
+   	//de una fuente externa o desencriptacion de contrasena como funciones separadas.
+	   
+   	//Lo correcto seria mudar los usuarios a .ini/.dat/DB y leerlos de ahi encriptados
+   	char login[16] = LOGIN;
+   	char paswd[32] = PASSWORD;
+	   
+   	//!strcmp parte de string.h para comparar arrays de chars de manera que devuelven true o false y se autoverifican
+   	if(!strcmp(login, tmp_login) && !strcmp(paswd, tmp_paswd))
+     	{
+		return true; //Logeado
+     	}
+   	else
+     	{
+		return false; //Fallo
+     	}
 }
 
-void menu_data(bool *empleados, bool *categorias, float *SueldoAnualProfesional, float *SueldoMes, int *TotalHorasExtra) // llenamos los datos
+void menu_data(bool *validated, float *SueldoAnualProfesional, float *SueldoMes, int *TotalHorasExtra) // llenamos los datos
 {
 	int tmp_legajo;
 	int tmp_categoria;
@@ -171,33 +176,35 @@ void menu_data(bool *empleados, bool *categorias, float *SueldoAnualProfesional,
 	int tmp_numero_empleado = 1;
 	int tmp_numero_categoria = 1; 
 	   
+	bool categorias = true;
+	bool empleados = true;
 
 	//== GET CATEGORIAS =========================================================
-	while(categorias)
+	while(categorias == true)
 	{
 		system("clear"); //system("cls");
 		printf("Introduce los datos de categoria #%d\n", tmp_numero_categoria);
 
 
 		//========= ASK ===================================== GET =============
-		printf("\nDescripcion: "); fflush(stdin); 				getchar(); gets(tmp_descripcion_categoria);
+		printf("\nDescripcion: "); fflush(stdin);				getchar(); gets(tmp_descripcion_categoria);
 		if(sizeof(tmp_descripcion_categoria) > DESCRIPCION) 
 		{
-		    	*categorias = false;
+		    	categorias = false;
 	    	}
 	    	printf("\nSalario: "); 						scanf("%d", &tmp_salario_categoria); 
 	    	if(tmp_salario_categoria < 1) 
 	    	{
-	    		*categorias = false;
+	    		categorias = false;
 	    	}
 		printf("\nValor de hora extra: "); 				scanf("%d", &tmp_che_categoria); 
 		if(tmp_che_categoria < 1) 
 		{
-	 		*categorias = false;
+	 		categorias = false;
 		}
 
 		//== CATEGORIAS VALIDATION PASSED
-		if(categorias)
+		if(categorias == true)
 		{
 			*DescripcionCategoria[tmp_numero_categoria] = *tmp_descripcion_categoria;
 	    		SalarioCategoria[tmp_numero_categoria] = tmp_salario_categoria;
@@ -214,45 +221,46 @@ void menu_data(bool *empleados, bool *categorias, float *SueldoAnualProfesional,
 			getchar();
 
 			printf("Los datos de la introduccion #%d no han sido validados por favor vuelva a introducirlos.", tmp_numero_categoria);
-			*categorias = true;
+			categorias = true;
 		     
 		}
 
-		if (tmp_numero_categoria > CATEGORIA) { *categorias = false; *empleados = true; break; }
+		if (tmp_numero_categoria > CATEGORIA) { categorias = false; empleados = true; *validated = false; break; }
 
    	}
 
    	// == GET EMPLEADOS =====================================
-	while(empleados)
+	while(empleados == true)
      	{
 		system("clear"); //system("cls");
 		printf("Introduce los datos de empleado #%d:", tmp_numero_empleado);
 
 		//====== ASK =========================== GET ======
 		printf("\nNumero de legajo: ");			scanf("%d", &tmp_legajo);
-	        	if(tmp_legajo == SALIDA) { break; }
+		if(tmp_legajo == SALIDA && *validated == true) { break; }
 	        	else if(tmp_legajo < 1 || tmp_legajo > LEGAJO)
 		{
-			*empleados = false;
+			empleados = false;
 		}
 		printf("\nCategoria perteneciente: ");		scanf("%d", &tmp_categoria);
 	        	if(tmp_categoria < 1 || tmp_categoria > CATEGORIA)
 		{
-			*empleados = false;
+			empleados = false;
 		}
 		printf("\nHoras Extra trabajadas: ");		scanf("%d", &tmp_horas);
 	        	if(tmp_horas < 0)
 		{
-			*empleados = false;
+			empleados = false;
 		}
 		printf("\nNumero del mes [1 - 12]: ");		scanf("%d", &tmp_mes);
 	        	if(tmp_mes < 1 || tmp_mes > MES)
 		{
-			*empleados = false;
+			empleados = false;
 		}
 		
+
 		// == EMPLEADOS VALIDATION PASSED ==
-	        	if(empleados)
+	        	if(empleados == true)
 		{
 			float pago = (float(SalarioCategoria[tmp_categoria]) + (float(tmp_horas) * float(CostoHoraExtraCategoria[tmp_categoria])));
 		     
@@ -260,13 +268,10 @@ void menu_data(bool *empleados, bool *categorias, float *SueldoAnualProfesional,
 		     	{
 				pago += pago / 2;
 		     	}
-
-		     	//*empleados = true; // modificamos 'data' a travez de su puntero para poder habilitar el menu al terminar de introducir los datos
 		       
 		     	SueldoAnualProfesional[tmp_legajo] += pago; // Definimos el sueldo anual de cada profesional
 		     	SueldoMes[tmp_mes] += pago; // Definimos el total pagado por mes
 		     	TotalHorasExtra[tmp_legajo] += tmp_horas;
-		     
 		     
 		     	tmp_numero_empleado += 1; // Aumentamos el numero actual en el orden del input (para tener un debug de cual nos tira error)
 
@@ -275,11 +280,14 @@ void menu_data(bool *empleados, bool *categorias, float *SueldoAnualProfesional,
 		}
 	        	else
 		{
-		     	system("clear"); //system("cls");
-		     	getchar();
-		     	printf("Los datos de la introduccion #%d no han sido validados por favor vuelva a introducirlos.", tmp_numero_empleado);
-		     	*empleados = true;
+			
+			system("clear"); //system("cls");
+			getchar();
+			printf("Los datos #%d no han sido validados o completos por favor vuelva a introducirlos.\n", tmp_numero_empleado);
+			empleados = true;
 		}
+		if (SueldoAnualProfesional[tmp_legajo] > 0) { *validated = true; printf("Validado!\n"); } 
+		if(tmp_numero_empleado > EMPLEADOS) { categorias = false; empleados = false; *validated = true; break; }
      	}
 }
 
@@ -311,7 +319,6 @@ void data_processing(int menu_item, float *Argument1, int *Argument2)
 	
 		for (int i = 0; i < LEGAJO; i++)
 	  	{
-	  		//printf("Argument1 #%d -> %f$\n", i, Argument1[i]);
 	     		if (Argument1[i] > 0)
 	       		{
 				printf("Legajo: #%d | Sueldo: %.2f$\n", i, Argument1[i]);
@@ -333,11 +340,6 @@ void data_processing(int menu_item, float *Argument1, int *Argument2)
 	  	}
 
 	  	printf("\n");
-
-		/*for (int i = 1; i <= MES; i++)
-		{
-			//printf("Total: %f$ | Mes: #%d\n", Argument1[i], i);
-		}*/
 	
 		getchar();
 		break;
@@ -397,8 +399,6 @@ void data_processing(int menu_item, float *Argument1, int *Argument2)
 				}
 	 		}
 	 	}
-
-
 
 	 	printf("Imprimiendo lista: \n");
 		for(int items = 0; items < LEGAJO; items++)
