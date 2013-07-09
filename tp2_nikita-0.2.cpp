@@ -4,9 +4,9 @@
 #include <unistd.h> /*no se si esta en windows, buscar y borrar "sleep(2)"*/
 //#include <windows.h>
 
-/*
-   EN WINDOWS HAY QUE BUSCAR system("clear"); Y REMPLAZARLO POR system("cls");
-*/
+	/*
+	EN WINDOWS HAY QUE BUSCAR system("clear"); Y REMPLAZARLO POR system("cls");
+	*/
 
 #define LOGIN "Nikita"
 #define PASSWORD "1234"
@@ -34,67 +34,62 @@ int main()
 	int TotalHorasExtra[LEGAJO] = {0};
    
 	bool validated = false;
-   	int menu_item;
+	int menu_item;
    
 	system("clear"); //system("cls")
 	if(login_request()) // nos logeamos
-     	{
+	{
 		while(menu_item != 5) // repetimos el switch hasta salir del menu
 		{
 			menu_item = menu_items(); // llamamos al menu para introducir items
 		     
 		 	if(validated == false && menu_item == 0) // opcion 0 usable solo si no introducimos nada
-		       	{
-				//system("clear"); //system("cls");
-			  	menu_data(&validated, SueldoAnualProfesional, SueldoMes, TotalHorasExtra); // introducimos datos
-		       	}
-		     	else if(validated == true) // si ya introducimos datos habilitamos las otras opciones
-		       	{
+			{
+				menu_data(&validated, SueldoAnualProfesional, SueldoMes, TotalHorasExtra); // introducimos datos
+			}
+			else if(validated == true) // si ya introducimos datos habilitamos las otras opciones
+			{
 				switch(menu_item) // opciones despues de introducir datos
-			    	{
-			     	case 0:
-			       		system("clear"); //system("cls");
-			       		getchar();
-			       		printf("Solo se puede introducir los datos una vez\n");
-			       		getchar();
-			       		break;
-			       
-			     	case 1:
-			       		system("clear"); //system("cls");
-			       		getchar();
-			       		data_processing(menu_item, SueldoAnualProfesional, 0);
-			       		break;
-			       
-			     	case 2:
-			       		system("clear"); //system("cls");
-			       		getchar();
-			       		data_processing(menu_item, SueldoMes, 0);
-			       		break;
-			       
-			     	case 3:
-			       		system("clear"); //system("cls");
-			       		getchar();
-			       		data_processing(menu_item, SueldoAnualProfesional, 0);
-			       		break;
-			       
-			     	case 4:
-			       		system("clear"); //system("cls");
-			       		getchar();
-			       		data_processing(menu_item, SueldoAnualProfesional, TotalHorasExtra);
-			       		break;
-			    	}
-		       	}
-		     	else if(menu_item == 5) // terminamos el loop
-		       	{
+				{
+				case 0:
+					system("clear"); //system("cls");
+					getchar();
+					printf("Solo se puede introducir los datos una vez\n");
+					getchar();
+					break;
+				case 1:
+					system("clear"); //system("cls");
+					getchar();
+					data_processing(menu_item, SueldoAnualProfesional, 0);
+					break;
+				case 2:
+					system("clear"); //system("cls");
+					getchar();
+					data_processing(menu_item, SueldoMes, 0);
+					break;
+				case 3:
+					system("clear"); //system("cls");
+					getchar();
+					data_processing(menu_item, SueldoAnualProfesional, 0);
+					break;
+				case 4:
+					system("clear"); //system("cls");
+					getchar();
+					data_processing(menu_item, SueldoAnualProfesional, TotalHorasExtra);
+					break;
+				}
+			}
+			else if(menu_item == 5) // terminamos el loop
+			{
 				return 0;
-		       	}
-		     	else // si tratamos de usar el menu sin introducir datos nos tira error
-		       	{
+			}
+			else // si tratamos de usar el menu sin introducir datos nos tira error
+			{
 				system("clear"); //system("cls");
 				getchar();
 				printf("Debes introducir los datos antes de usar el menu\n");
 				getchar();
-		       	}
+			}
 		}
 	}
 	return 0;
@@ -259,25 +254,25 @@ void menu_data(bool *validated, float *SueldoAnualProfesional, float *SueldoMes,
 		
 
 		// == EMPLEADOS VALIDATION PASSED ==
-	        	if(empleados == true)
+		if(empleados == true)
 		{
 			float pago = (float(SalarioCategoria[tmp_categoria]) + (float(tmp_horas) * float(CostoHoraExtraCategoria[tmp_categoria])));
 		     
-		     	if(tmp_mes == 7 || tmp_mes == 12)
-		     	{
+			if(tmp_mes == 7 || tmp_mes == 12)
+			{
 				pago += pago / 2;
-		     	}
+			}
 		       
-		     	SueldoAnualProfesional[tmp_legajo] += pago; // Definimos el sueldo anual de cada profesional
-		     	SueldoMes[tmp_mes] += pago; // Definimos el total pagado por mes
-		     	TotalHorasExtra[tmp_legajo] += tmp_horas;
+			SueldoAnualProfesional[tmp_legajo] += pago; // Definimos el sueldo anual de cada profesional
+			SueldoMes[tmp_mes] += pago; // Definimos el total pagado por mes
+			TotalHorasExtra[tmp_legajo] += tmp_horas;
 		     
-		     	tmp_numero_empleado += 1; // Aumentamos el numero actual en el orden del input (para tener un debug de cual nos tira error)
+			tmp_numero_empleado += 1; // Aumentamos el numero actual en el orden del input (para tener un debug de cual nos tira error)
 
-		     	getchar();
-		     	system("clear"); //system("cls");
+			getchar();
+			system("clear"); //system("cls");
 		}
-	        	else
+		else
 		{
 			getchar();
 			printf("Los datos #%d no han sido validados o completos por favor vuelva a introducirlos.\n", tmp_numero_empleado);
@@ -287,76 +282,75 @@ void menu_data(bool *validated, float *SueldoAnualProfesional, float *SueldoMes,
 		}
 		if (SueldoAnualProfesional[tmp_legajo] > 0) { *validated = true; printf("Validado!\n"); } 
 		if(tmp_numero_empleado > EMPLEADOS) { categorias = false; empleados = false; *validated = true; break; }
-     	}
+	}
 }
 
 short int menu_items() // menu separado para poder imprimirlo cuando lo necesite
 {
 	int menu_item;
    
-   	system("clear"); //system("cls");
+	system("clear"); //system("cls");
     
-   	printf("Bienvenido al menu principal del programa.\n");
-   	printf("0) Introducir datos\n");
-   	printf("1) Sueldo anual\n");
-   	printf("2) Total pagado por mes\n");
-   	printf("3) Sueldos superando el promedio\n");
-   	printf("4) Imprimir sueldos anuales\n");
-   	printf("5) Salir\n");
+	printf("Bienvenido al menu principal del programa.\n");
+	printf("0) Introducir datos\n");
+	printf("1) Sueldo anual\n");
+	printf("2) Total pagado por mes\n");
+	printf("3) Sueldos superando el promedio\n");
+	printf("4) Imprimir sueldos anuales\n");
+	printf("5) Salir\n");
    
-   	printf("Opcion: "); scanf("%d", &menu_item);
+	printf("Opcion: "); scanf("%d", &menu_item);
    
 	return menu_item;
 }
 
 void data_processing(int menu_item, float *Argument1, int *Argument2)
 {
-   	switch(menu_item)
-     	{
-      	case 1:
+	switch(menu_item)
+	{
+	case 1:
 		printf("Sueldo anual de cada profesional:\n");
 	
 		for (int i = 0; i < LEGAJO; i++)
-	  	{
-	     		if (Argument1[i] > 0)
-	       		{
+		{
+			if(Argument1[i] > 0)
+			{
 				printf("Legajo: #%d | Sueldo: %.2f$\n", i, Argument1[i]);
-	       		}
-	     
-	  	}
+			}
+		}
 	
 		getchar();
 		break;
 	
-      	case 2:
+	case 2:
 		printf("Total pagado por mes:\n");
 		for (int i = 1; i <= MES; i++)
-	  	{
-	     		if (Argument1[i] > 0)
-	       		{
-		  		printf("Total: %.2f$ | Mes: #%d\n", Argument1[i], i);
-	       		}
-	  	}
+		{
+			if(Argument1[i] > 0)
+			{
+				printf("Total: %.2f$ | Mes: #%d\n", Argument1[i], i);
+			}
+		}
 
-	  	printf("\n");
+		printf("\n");
 	
 		getchar();
 		break;
 	
-      	case 3:
+	case 3:
 		int tmp_avglegajo;
 		int tmp_numbers;
 		float average;
 
 		tmp_numbers = 0;
 		for(int i = 1; i <= LEGAJO; i++)
-	  	{
-	     		if (Argument1[i] > 0)
-	       		{
-		  		tmp_numbers += 1;
-		  		tmp_avglegajo += Argument1[i];
-	       		}
-	  	}
+		{
+			if(Argument1[i] > 0)
+			{
+				tmp_numbers += 1;
+				tmp_avglegajo += Argument1[i];
+			}
+		}
 	
 		average = tmp_avglegajo / tmp_numbers;
 	
@@ -374,7 +368,7 @@ void data_processing(int menu_item, float *Argument1, int *Argument2)
 		getchar();
 		break;
 	
-      	case 4:
+	case 4:
 		int LegajoOrdenadoSueldo[LEGAJO]; //Creamos un vector igual al original para ordenarlo y sacar los index
 		int LegajoIndexOrdenado[LEGAJO]; //Aca vienen las posiciones originales del vector sueldos ordenados (copia de la posicion de los sueldos desordenados)
 		for(int i = 0; i < LEGAJO; i++) { LegajoIndexOrdenado[i] = i; } //numeros de legajo en el orden correcto para llamar todos los datos por ese orden.
@@ -384,35 +378,37 @@ void data_processing(int menu_item, float *Argument1, int *Argument2)
 
 		for(c = 0; c < (LEGAJO - 1); c++) 
 		{
-            		for (d = c + 1; d < LEGAJO; d++) 
-            		{ 
-	           		if (LegajoOrdenadoSueldo[d] > LegajoOrdenadoSueldo[c]) 
-                    			{
-	                      		tmp_mem = LegajoOrdenadoSueldo[d];
-                       			LegajoOrdenadoSueldo[d] = LegajoOrdenadoSueldo[c];
-                        			LegajoOrdenadoSueldo[c] = tmp_mem;
-	                        
-	                       		tmp_mem = LegajoIndexOrdenado[d];
-	                       		LegajoIndexOrdenado[d] = LegajoIndexOrdenado[c];
-	                       		LegajoIndexOrdenado[c] = tmp_mem;
-				}
-	 		}
-	 	}
+			for (d = c + 1; d < LEGAJO; d++) 
+			{ 
+				if(LegajoOrdenadoSueldo[d] > LegajoOrdenadoSueldo[c]) 
+				{
+					// ORDENA LA COPIA DE SUELDO-ANUAL A SUELDO-ORDENADO
+					tmp_mem = LegajoOrdenadoSueldo[d];
+					LegajoOrdenadoSueldo[d] = LegajoOrdenadoSueldo[c];
+					LegajoOrdenadoSueldo[c] = tmp_mem;
 
-	 	printf("Imprimiendo lista: \n");
+					// ORDENA LA REFERENCIA AL ORIGINAL DE LA COPIA ORDENADA
+					tmp_mem = LegajoIndexOrdenado[d];
+					LegajoIndexOrdenado[d] = LegajoIndexOrdenado[c];
+					LegajoIndexOrdenado[c] = tmp_mem;
+				}
+			}
+		}
+
+		printf("Imprimiendo lista: \n");
 		for(int items = 0; items < LEGAJO; items++)
-	 	{
-	 		int legajo = LegajoIndexOrdenado[items];
-	 
-	 		if(Argument1[LegajoIndexOrdenado[items]] > 0)
-	 		{
-	 			printf("Sueldo: %.2f\n", Argument1[LegajoIndexOrdenado[items]]);
-		 		printf("  Legajo: %d\n", legajo);
-		 		printf("  Horas extra: %d\n\n", Argument2[LegajoIndexOrdenado[items]]);
+		{
+			int legajo = LegajoIndexOrdenado[items];
+	
+			if(Argument1[LegajoIndexOrdenado[items]] > 0)
+			{
+				printf("Sueldo: %.2f\n", Argument1[LegajoIndexOrdenado[items]]);
+				printf("  Legajo: %d\n", legajo);
+				printf("  Horas extra: %d\n\n", Argument2[LegajoIndexOrdenado[items]]);
 			}
 		}
 	
 		getchar();
 		break;	
-     	}   
+	} 
 }
